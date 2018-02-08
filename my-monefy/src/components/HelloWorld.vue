@@ -6,6 +6,7 @@
       type="daterange"
       range-separator="To"
       start-placeholder="Start date"
+      :picker-options="pickerOptions"
       end-placeholder="End date">
     </el-date-picker>
     <el-table
@@ -59,11 +60,49 @@ export default {
        list: [],
        listFilter: [],
        chartData: [],
-       chartLabels: []
+       chartLabels: [],
+       pickerOptions: {},
     }
   },
   mounted() {
     this.loadData();
+  },
+  created(){
+    this.pickerOptions = {
+      shortcuts: [{
+                  text: 'Last week',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: 'Last month',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: 'Last 3 months',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },{
+                  text: 'Last year',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+    }
   },
   watch: {
     value: function() {
