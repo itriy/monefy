@@ -8,8 +8,6 @@
       start-placeholder="Start date"
       end-placeholder="End date">
     </el-date-picker>
-    <p>{{value}}</p>
-
     <el-table
       :data="listFilter"
       stripe
@@ -88,21 +86,17 @@ export default {
 
         if(!this.listFilter) return false;
 
-      this.listFilter.map((elem) => {
+      this.listFilter.forEach((elem) => {
         if(this.formatAmount(elem.amount) < 0) {
           this.sortLables(elem.category)
         }
-        // this.chartData.push(this.formatAmount(elem.amount))
-        // this.chartLabels.push(category)
-        return ;
-
       });
 
-      this.chartLabels.map((cat) => {
+      this.chartLabels.forEach((cat) => {
         this.categoryAmountSum(cat)
       });
 
-      // console.log('chartData',this.chartData)
+      console.log('chartData',this.chartData)
       console.log('chartLabels',this.chartLabels)
 
     }
@@ -126,16 +120,11 @@ export default {
       let catArr = this.listFilter.filter((elem) => {
         return elem.category == cat
       })
-
-      console.log('catArr',catArr)
-
       let result = catArr.reduce((sum, current) => {
         return sum + this.formatAmount(current.amount);
       }, 0)
 
-      console.warn('result',result)
-
-      return result;
+      this.chartData.push(Math.abs(result));
     },
 
     formatAmount(val){

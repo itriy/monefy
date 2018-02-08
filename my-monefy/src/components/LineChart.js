@@ -1,9 +1,8 @@
-import { Pie, mixins } from 'vue-chartjs'
+import { Doughnut, mixins } from 'vue-chartjs'
 
 export default {
-  extends: Pie,
+  extends: Doughnut,
   props: ['chartData','chartLabels'],
-  // mixins: [mixins.reactiveData],
   watch: {
     chartData: function(newValue, oldValue){
         // console.log('newValue',newValue)
@@ -18,11 +17,15 @@ export default {
   },
   methods: {
     myRender() {
+        if (this.$data._chart) {
+            console.log('destroy')
+            this.$data._chart.destroy();
+        }
+
         this.renderChart({
           labels: this.chartLabels,
           datasets: [
             {
-              // label: ['#FC2525','#05CBE1','#FC2525','#05CBE1','#FC2525','#05CBE1','#FC2525'],
               backgroundColor: ['#FF25A5','#05CBE1','#AC2525','#050BE1','#FC2525','#95CBE1','#1C2525'],
               data: this.chartData,
             }
