@@ -1,5 +1,10 @@
 <template>
   <div>
+    <p>{{ count }}</p>
+    <p>
+      <button @click="increment">+</button>
+      <button @click="decrement">-</button>
+    </p>
     <el-date-picker
       class="datapicker"
       v-model="value"
@@ -9,8 +14,9 @@
       :picker-options="pickerOptions"
       end-placeholder="End date">
     </el-date-picker>
+    <line-example :chart-data="chartData" :chart-labels="chartLabels"></line-example>
     <el-table
-      :data="listFilter"
+      :data="pickedList"
       stripe
       border
       style="width: 100%">
@@ -39,15 +45,11 @@
     </el-table>
 
 
-    <line-example :chart-data="chartData" :chart-labels="chartLabels"></line-example>
-
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-// import VueCharts from 'vue-chartjs'
-// import { Pie } from 'vue-chartjs'
 import LineExample from './LineChart'
 
 
@@ -57,15 +59,31 @@ export default {
   data () {
     return {
        value: '',
-       list: [],
-       listFilter: [],
+       // list: [],
+       // pickedList: [],
        chartData: [],
        chartLabels: [],
        pickerOptions: {},
     }
   },
   mounted() {
-    this.loadData();
+    // this.loadData();
+    this.$store.dispatch('getList')
+  },
+  computed: {
+    count () {
+      return this.$store.state.count
+    },
+
+    pickedList: {
+      get(){
+        return this.$store.state.pickedList
+      },
+      set(value){
+        this.$store.state.commit('pick-list',value)
+      }
+    }
+
   },
   created(){
     this.pickerOptions = {
@@ -105,40 +123,31 @@ export default {
     }
   },
   watch: {
-    value: function() {
-
-      // this.listFilter = (!this.value) ? [] : this.list.filter((elem) => {
-      //   return this.formatDate(elem.date) >= +this.value[0] && this.formatDate(elem.date) <= +this.value[1]
-      // })
-
-      if (!this.value) return this.listFilter = [];
-
-      this.listFilter = this.list.filter((elem) => {
-        return this.formatDate(elem.date) >= +this.value[0] && this.formatDate(elem.date) <= +this.value[1]
-      });
+    value() {
+        this.$store.commit('pick-list',this.value)
     },
 
-    listFilter: function(){
+    // pickedList: function(){
 
-        this.chartData = [];
-        this.chartLabels = [];
+    //     this.chartData = [];
+    //     this.chartLabels = [];
 
-        if(!this.listFilter) return false;
+    //     if(!this.pickedList) return false;
 
-      this.listFilter.forEach((elem) => {
-        if(this.formatAmount(elem.amount) < 0) {
-          this.sortLables(elem.category)
-        }
-      });
+    //   this.pickedList.forEach((elem) => {
+    //     if(this.formatAmount(elem.amount) < 0) {
+    //       this.sortLables(elem.category)
+    //     }
+    //   });
 
-      this.chartLabels.forEach((cat) => {
-        this.categoryAmountSum(cat)
-      });
+    //   this.chartLabels.forEach((cat) => {
+    //     this.categoryAmountSum(cat)
+    //   });
 
-      console.log('chartData',this.chartData)
-      console.log('chartLabels',this.chartLabels)
+    //   console.log('chartData',this.chartData)
+    //   console.log('chartLabels',this.chartLabels)
 
-    }
+    // }
   },
   methods: {
     loadData() {
@@ -151,12 +160,19 @@ export default {
         });
     },
 
+    increment () {
+      this.$store.commit('increment')
+    },
+    decrement () {
+      this.$store.commit('decrement')
+    },
+
     sortLables(elem) {
       if(this.chartLabels.indexOf(elem) === -1 && elem.indexOf('To') && elem.indexOf('From')) this.chartLabels.push(elem)
     },
 
     categoryAmountSum(cat){
-      let catArr = this.listFilter.filter((elem) => {
+      let catArr = this.pickedList.filter((elem) => {
         return elem.category == cat
       })
       let result = catArr.reduce((sum, current) => {
