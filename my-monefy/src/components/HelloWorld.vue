@@ -59,15 +59,12 @@ export default {
   data () {
     return {
        value: '',
-       // list: [],
-       // pickedList: [],
        chartData: [],
        chartLabels: [],
        pickerOptions: {},
     }
   },
   mounted() {
-    // this.loadData();
     this.$store.dispatch('getList')
   },
   computed: {
@@ -79,8 +76,8 @@ export default {
       get(){
         return this.$store.state.pickedList
       },
-      set(value){
-        this.$store.state.commit('pick-list',value)
+      set(val){
+        this.$store.state.commit('pick-list',val)
       }
     }
 
@@ -124,41 +121,28 @@ export default {
   },
   watch: {
     value() {
-        this.$store.commit('pick-list',this.value)
+        this.$store.commit('pick-list',this.value);
+
+          this.chartData = [];
+          this.chartLabels = [];
+
+          if(!this.pickedList) return false;
+
+          this.pickedList.forEach((elem) => {
+            if(this.formatAmount(elem.amount) < 0) {
+              this.sortLables(elem.category)
+            }
+          });
+
+          this.chartLabels.forEach((cat) => {
+            this.categoryAmountSum(cat)
+          });
+
+          console.log('chartData',this.chartData)
+          console.log('chartLabels',this.chartLabels)
     },
-
-    // pickedList: function(){
-
-    //     this.chartData = [];
-    //     this.chartLabels = [];
-
-    //     if(!this.pickedList) return false;
-
-    //   this.pickedList.forEach((elem) => {
-    //     if(this.formatAmount(elem.amount) < 0) {
-    //       this.sortLables(elem.category)
-    //     }
-    //   });
-
-    //   this.chartLabels.forEach((cat) => {
-    //     this.categoryAmountSum(cat)
-    //   });
-
-    //   console.log('chartData',this.chartData)
-    //   console.log('chartLabels',this.chartLabels)
-
-    // }
   },
   methods: {
-    loadData() {
-      this.loading = true;
-        axios.get('/static/db.json')
-          .then(response => response.data)
-          .then((response) => {
-            this.list = response;
-            this.loading = false;
-        });
-    },
 
     increment () {
       this.$store.commit('increment')
@@ -185,14 +169,7 @@ export default {
     formatAmount(val){
       let amount = val.split(' ');
       return parseInt(amount.join(''));
-    },
-
-    formatDate(value) {
-      var arr = value.split('/')
-      var date = +new Date(arr[2], arr[1]-1, arr[0]);
-
-      return date;
-    },
+    }
 
   },
 }

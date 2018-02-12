@@ -5,11 +5,7 @@ export default {
   props: ['chartData','chartLabels'],
   watch: {
     chartData: function(newValue, oldValue){
-        // console.log('newValue',newValue)
-        // console.log('oldValue',oldValue)
        if(newValue != oldValue) this.myRender()
-
-        // console.log('chart',this.chartData)
     }
   },
   mounted () {
@@ -31,8 +27,6 @@ export default {
             }
           ]
         },{responsive: true, maintainAspectRatio: false})
-
-        // console.log('chart',this.chartData)
     }
   }
 }
