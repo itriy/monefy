@@ -1,10 +1,5 @@
 <template>
   <div>
-    <p>{{ count }}</p>
-    <p>
-      <button @click="increment">+</button>
-      <button @click="decrement">-</button>
-    </p>
     <el-date-picker
       class="datapicker"
       v-model="value"
@@ -49,7 +44,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import LineExample from './LineChart'
 
 
@@ -143,13 +137,6 @@ export default {
     },
   },
   methods: {
-
-    increment () {
-      this.$store.commit('increment')
-    },
-    decrement () {
-      this.$store.commit('decrement')
-    },
 
     sortLables(elem) {
       if(this.chartLabels.indexOf(elem) === -1 && elem.indexOf('To') && elem.indexOf('From')) this.chartLabels.push(elem)

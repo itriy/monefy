@@ -8,12 +8,9 @@ const store = new Vuex.Store({
     strict: true,
     state: {
         list: [],
-        pickedList: [],
-        count: 0
+        pickedList: []
     },
     mutations: {
-        increment: state => state.count++,
-        decrement: state => state.count--,
         'set-list': (state,payload) => state.list = payload,
         'pick-list': (state, payload) => {
             
