@@ -85,7 +85,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('getList');
+    // this.$store.dispatch('getList');
   },
   computed: {
 
