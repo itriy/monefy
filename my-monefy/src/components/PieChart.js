@@ -1,7 +1,7 @@
-import { Line, mixins } from 'vue-chartjs'
+import { Doughnut, mixins } from 'vue-chartjs'
 
 export default {
-  extends: Line,
+  extends: Doughnut,
   props: ['chartData','chartLabels'],
   watch: {
     chartData: function(newValue, oldValue){

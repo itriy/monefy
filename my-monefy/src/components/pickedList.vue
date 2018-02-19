@@ -1,5 +1,11 @@
 <template>
   <div>
+<!--     <p>
+      <router-link to="/">main</router-link>
+      <router-link to="/test">test</router-link>
+    </p> -->
+    
+ <!-- <p>{{$route.params.id}}</p> -->
     <el-date-picker
       class="datapicker"
       v-model="value"
@@ -9,35 +15,53 @@
       :picker-options="pickerOptions"
       end-placeholder="End date">
     </el-date-picker>
-    <line-example :chart-data="chartData" :chart-labels="chartLabels"></line-example>
-    <el-table
-      :data="pickedList"
-      stripe
-      border
-      style="width: 100%">
-      <el-table-column
-        prop="account"
-        label="Account"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="category"
-        sortable
-        label="Category">
-      </el-table-column>
-      <el-table-column
-        prop="amount"
-        label="Amount"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="currency"
-        label="Currency"
-        width="100">
-      </el-table-column>
-    </el-table>
+    <el-row>
+      <el-col :span="24">
+        <el-menu :default-active="activeIndex" router mode="horizontal">
+          <el-menu-item index="/">Pie</el-menu-item>
+          <el-menu-item index="/line">Line</el-menu-item>
+        </el-menu>
+        
+          <pie-example  v-if="$route.params.id !== 'line'" :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
+
+          <line-example  v-if="$route.params.id === 'line'" :chart-data="PieChartData" :chart-labels="PieChartLabels"></line-example>
+
+      </el-col>
+      <el-col :span="24">
+        <el-collapse accordion>
+          <el-collapse-item title="Table" name="1">
+            <el-table
+              :data="pickedList"
+              stripe
+              border
+              style="width: 100%">
+              <el-table-column
+                prop="account"
+                label="Account"
+                sortable
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="category"
+                sortable
+                label="Category">
+              </el-table-column>
+              <el-table-column
+                prop="amount"
+                label="Amount"
+                sortable
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="currency"
+                label="Currency"
+                width="100">
+              </el-table-column>
+            </el-table>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+    </el-row>
 
 
   </div>
@@ -45,33 +69,36 @@
 
 <script>
 import LineExample from './LineChart'
+import PieExample from './PieChart'
 
 
 export default {
-  name: 'HelloWorld',
-  components: { LineExample },
+  name: 'pickedList',
+  components: { LineExample, PieExample },
   data () {
     return {
        value: '',
-       chartData: [],
-       chartLabels: [],
+       PieChartData: [],
+       PieChartLabels: [],
        pickerOptions: {},
+       activeIndex: '/'
     }
   },
   mounted() {
-    this.$store.dispatch('getList')
+    this.$store.dispatch('getList');
   },
   computed: {
-    count () {
-      return this.$store.state.count
-    },
+
+    // activeIndex(){
+    //   this.activeIndex = this.$route.params.id ? $route.params.id : '/'
+    // },
 
     pickedList: {
       get(){
         return this.$store.state.pickedList
       },
       set(val){
-        this.$store.state.commit('pick-list',val)
+        this.$store.dispatch('getPickedList',val);
       }
     }
 
@@ -115,10 +142,11 @@ export default {
   },
   watch: {
     value() {
-        this.$store.commit('pick-list',this.value);
 
-          this.chartData = [];
-          this.chartLabels = [];
+          this.$store.dispatch('getPickedList',this.value);
+
+          this.PieChartData = [];
+          this.PieChartLabels = [];
 
           if(!this.pickedList) return false;
 
@@ -128,18 +156,18 @@ export default {
             }
           });
 
-          this.chartLabels.forEach((cat) => {
+          this.PieChartLabels.forEach((cat) => {
             this.categoryAmountSum(cat)
           });
 
-          console.log('chartData',this.chartData)
-          console.log('chartLabels',this.chartLabels)
+          console.log('PieChartData',this.PieChartData)
+          console.log('PieChartLabels',this.PieChartLabels)
     },
   },
   methods: {
 
     sortLables(elem) {
-      if(this.chartLabels.indexOf(elem) === -1 && elem.indexOf('To') && elem.indexOf('From')) this.chartLabels.push(elem)
+      if(this.PieChartLabels.indexOf(elem) === -1 && elem.indexOf('To') && elem.indexOf('From')) this.PieChartLabels.push(elem)
     },
 
     categoryAmountSum(cat){
@@ -150,7 +178,7 @@ export default {
         return sum + this.formatAmount(current.amount);
       }, 0)
 
-      this.chartData.push(Math.abs(result));
+      this.PieChartData.push(Math.abs(result));
     },
 
     formatAmount(val){
