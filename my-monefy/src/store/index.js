@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios';
+import firebase from '@/components/firebase';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
+Vue.use(firebase);
 
 let formatDate = (value) => {
     let arr = value.split('/')
@@ -11,6 +13,7 @@ let formatDate = (value) => {
     return date;
 };
 
+console.log(firebase.database.ref('monefydb'))
 const store = new Vuex.Store({
     strict: true,
     state: {
@@ -23,17 +26,23 @@ const store = new Vuex.Store({
     },
     actions: {
         getList(context) {
-            axios.get('/static/db.json')
+            axios.get('https://monefydb.firebaseio.com/.json')
               .then(response => response.data)
               .then((list) => {
                 context.commit('set-list', list)
             });
+
+            // firebase.database.ref('monefydb').once('value')
+            //   .then((list) => {
+            //     console.log(list)
+            //     // context.commit('set-list', list)
+            // })
         },
         getPickedList(context, value) {
             let pickedList = !value ? [] : this.state.list.filter((elem) => {
                 return formatDate(elem.date) >= +value[0] && formatDate(elem.date) <= +value[1]
               })
-            
+
             context.commit('pick-list', pickedList)
         }
     },
@@ -41,7 +50,5 @@ const store = new Vuex.Store({
     }
 
 });
-
-
 
 export default store;
