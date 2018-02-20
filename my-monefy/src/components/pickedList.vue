@@ -1,11 +1,5 @@
 <template>
   <div>
-<!--     <p>
-      <router-link to="/">main</router-link>
-      <router-link to="/test">test</router-link>
-    </p> -->
-    
- <!-- <p>{{$route.params.id}}</p> -->
     <el-date-picker
       class="datapicker"
       v-model="value"
@@ -15,6 +9,9 @@
       :picker-options="pickerOptions"
       end-placeholder="End date">
     </el-date-picker>
+
+    <!-- <p>{{$route.params.id}}</p> -->
+{{valueCalc}}
     <el-row>
       <el-col :span="24">
         <el-menu :default-active="activeIndex" router mode="horizontal">
@@ -24,7 +21,7 @@
         
           <pie-example  v-if="$route.params.id !== 'line'" :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
 
-          <line-example  v-if="$route.params.id === 'line'" :chart-data="PieChartData" :chart-labels="PieChartLabels"></line-example>
+          <line-example  v-if="$route.params.id === 'line'" :chart-data="LineChartData" :chart-labels="LineChartLabels"></line-example>
 
       </el-col>
       <el-col :span="24">
@@ -80,26 +77,34 @@ export default {
        value: '',
        PieChartData: [],
        PieChartLabels: [],
+
+       LineChartData: [],
+       LineChartLabels: [],
        pickerOptions: {},
        activeIndex: '/'
     }
   },
-  mounted() {
-    // this.$store.dispatch('getList');
-  },
+  // mounted() {
+  //   // this.$store.dispatch('getList');
+  // },
   computed: {
-
-    // activeIndex(){
-    //   this.activeIndex = this.$route.params.id ? $route.params.id : '/'
-    // },
 
     pickedList: {
       get(){
-        return this.$store.state.pickedList
+        return this.$store.getters.pickedList
       },
       set(val){
         this.$store.dispatch('getPickedList',val);
       }
+    },
+    valueCalc(){
+       this.$store.dispatch('getPickedList',this.value);
+
+       this.PieChartLabels = this.$store.getters.pickedListCategory;
+       this.PieChartData = this.$store.getters.pickedSumListToCategory;
+
+      console.log('PieChartLabels',this.PieChartLabels)
+      console.log('PieChartData',this.PieChartData)
     }
 
   },
@@ -140,53 +145,11 @@ export default {
                 }]
     }
   },
-  watch: {
-    value() {
 
-          this.$store.dispatch('getPickedList',this.value);
+  // methods: {
 
-          this.PieChartData = [];
-          this.PieChartLabels = [];
 
-          if(!this.pickedList) return false;
-
-          this.pickedList.forEach((elem) => {
-            if(this.formatAmount(elem.amount) < 0) {
-              this.sortLables(elem.category)
-            }
-          });
-
-          this.PieChartLabels.forEach((cat) => {
-            this.categoryAmountSum(cat)
-          });
-
-          console.log('PieChartData',this.PieChartData)
-          console.log('PieChartLabels',this.PieChartLabels)
-    },
-  },
-  methods: {
-
-    sortLables(elem) {
-      if(this.PieChartLabels.indexOf(elem) === -1 && elem.indexOf('To') && elem.indexOf('From')) this.PieChartLabels.push(elem)
-    },
-
-    categoryAmountSum(cat){
-      let catArr = this.pickedList.filter((elem) => {
-        return elem.category == cat
-      })
-      let result = catArr.reduce((sum, current) => {
-        return sum + this.formatAmount(current.amount);
-      }, 0)
-
-      this.PieChartData.push(Math.abs(result));
-    },
-
-    formatAmount(val){
-      let amount = val.split(' ');
-      return parseInt(amount.join(''));
-    }
-
-  },
+  // },
 }
 </script>
 

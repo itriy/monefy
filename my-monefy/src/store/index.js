@@ -11,11 +11,14 @@ Vue.use(firebase);
 let formatDate = (value) => {
     let arr = value.split('/')
     let date = +new Date(arr[2], arr[1]-1, arr[0]);
-
     return date;
-};
+}
 
-// console.log(firebase.database())
+let formatAmount = (val) => {
+    let amount = val.split(' ');
+    return parseInt(amount.join(''));
+}
+
 const store = new Vuex.Store({
     strict: true,
     state: {
@@ -40,14 +43,56 @@ const store = new Vuex.Store({
 
         },
         getPickedList(context, value) {
-            let pickedList = !value ? [] : this.state.list.filter((elem) => {
-                return formatDate(elem.date) >= +value[0] && formatDate(elem.date) <= +value[1]
-              })
+            let pickedList = context.getters.pickedFilterList(value);
 
-            context.commit('pick-list', pickedList)
+            context.commit('pick-list', pickedList);
+
+            return pickedList
         }
     },
-    getter: {
+    getters: {
+        pickedFilterList(state) { return (value) => {
+           return !value ? [] : state.list.filter((elem) => {
+                return formatDate(elem.date) >= +value[0] && formatDate(elem.date) <= +value[1]
+            })
+        }},
+        pickedList(state){
+            return state.pickedList
+        },
+        pickedListCategory(state){
+            let pickedListCategory = [];
+
+            state.pickedList.map((elem) => {
+
+                if((formatAmount(elem.amount) < 0) && 
+                    pickedListCategory.indexOf(elem.category) === -1 &&
+                    elem.category.indexOf('To') && elem.category.indexOf('From')) {
+
+                    pickedListCategory.push(elem.category)
+                }
+            })
+
+            return pickedListCategory
+        },
+        pickedSumListToCategory(state, getters) {
+            let pickedSumListToCategory = [];
+            let category = getters.pickedListCategory;
+
+            category.forEach((cat) => {
+
+                let catArr = state.pickedList.filter((elem) => {
+                  return elem.category === cat
+                })
+
+                let result = catArr.reduce((sum, current) => {
+                  return sum + formatAmount(current.amount);
+                }, 0)
+
+                pickedSumListToCategory.push(Math.abs(result));
+            })
+
+            return pickedSumListToCategory
+        }
     }
 
 });
