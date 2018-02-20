@@ -64,15 +64,24 @@ const store = new Vuex.Store({
 
             state.pickedList.map((elem) => {
 
-                if((formatAmount(elem.amount) < 0) && 
-                    pickedListCategory.indexOf(elem.category) === -1 &&
-                    elem.category.indexOf('To') && elem.category.indexOf('From')) {
-
-                    pickedListCategory.push(elem.category)
+                if((formatAmount(elem.amount) < 0) && pickedListCategory.indexOf(elem.category) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
+                    return pickedListCategory.push(elem.category)
                 }
             })
 
             return pickedListCategory
+        },
+        pickedListDate(state) {
+            let pickedListDate = [];
+
+            state.pickedList.map((elem) => {
+
+                if(pickedListDate.indexOf(elem.date) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
+                    return pickedListDate.push(elem.date)
+                }
+            })
+
+            return pickedListDate
         },
         pickedSumListToCategory(state, getters) {
             let pickedSumListToCategory = [];
@@ -92,7 +101,27 @@ const store = new Vuex.Store({
             })
 
             return pickedSumListToCategory
+        },
+        pickedDateListToCategory(state, getters) {
+            // let pickedDateListToCategory = [];
+            // let category = getters.pickedListCategory;
+
+            // category.forEach((cat) => {
+
+            //     let catArr = state.pickedList.filter((elem) => {
+            //       return elem.category === cat
+            //     })
+
+            //     // let date = catArr.reduce((sum, current) => {
+            //     //   return sum + formatAmount(current.amount);
+            //     // }, 0)
+
+            //     pickedDateListToCategory.push(Math.abs(date));
+            // })
+
+            // return pickedDateListToCategory;
         }
+
     }
 
 });

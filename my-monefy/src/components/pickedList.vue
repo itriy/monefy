@@ -103,8 +103,14 @@ export default {
        this.PieChartLabels = this.$store.getters.pickedListCategory;
        this.PieChartData = this.$store.getters.pickedSumListToCategory;
 
-      console.log('PieChartLabels',this.PieChartLabels)
-      console.log('PieChartData',this.PieChartData)
+       this.LineChartLabels = this.$store.getters.pickedDateList;
+       this.LineChartData = this.$store.getters.pickedIncomeOutgoList;
+
+      // console.log('PieChartLabels',this.PieChartLabels)
+      // console.log('PieChartData',this.PieChartData)
+
+      console.log('LineChartLabels',this.LineChartLabels)
+      console.log('LineChartData',this.LineChartData)
     }
 
   },

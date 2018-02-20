@@ -25,8 +25,6 @@ new Vue({
         messagingSenderId: "628234001672"
     });
 
-    // console.log('test',firebase.database().ref('monefydb'))
-
     this.$store.dispatch('getList')
   }
 })

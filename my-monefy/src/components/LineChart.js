@@ -1,7 +1,7 @@
-import { Line, mixins } from 'vue-chartjs'
+import { Bar, mixins } from 'vue-chartjs'
 
 export default {
-  extends: Line,
+  extends: Bar,
   data(){
     return {
       gradient: null,
@@ -36,10 +36,10 @@ export default {
         }
 
         this.renderChart({
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          labels: this.chartLabels,
           datasets: [
             {
-              label: 'Data One',
+              label: 'Расход',
               borderColor: '#FC2525',
               pointBackgroundColor: 'white',
               borderWidth: 1,
@@ -47,7 +47,7 @@ export default {
               backgroundColor: this.gradient,
               data: [40, 39, 10, 40, 39, 80, 40]
             },{
-              label: 'Data Two',
+              label: 'Доход',
               borderColor: '#05CBE1',
               pointBackgroundColor: 'white',
               pointBorderColor: 'white',
