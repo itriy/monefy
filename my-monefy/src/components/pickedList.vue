@@ -16,7 +16,7 @@
       <el-col :span="24">
         <el-menu :default-active="activeIndex" router mode="horizontal">
           <el-menu-item index="/">Pie</el-menu-item>
-          <el-menu-item index="/line">Line</el-menu-item>
+          <el-menu-item index="line">Line</el-menu-item>
         </el-menu>
         
           <pie-example  v-if="$route.params.id !== 'line'" :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
@@ -44,7 +44,7 @@
                 label="Category">
               </el-table-column>
               <el-table-column
-                prop="amount"
+                prop="converted amount"
                 label="Amount"
                 sortable
                 width="100">
@@ -81,13 +81,17 @@ export default {
        LineChartData: [],
        LineChartLabels: [],
        pickerOptions: {},
-       activeIndex: '/'
+       // activeIndex: '/'
     }
   },
   // mounted() {
   //   // this.$store.dispatch('getList');
   // },
   computed: {
+
+    activeIndex(){
+      return this.$route.params.id || '/';
+    },
 
     pickedList: {
       get(){

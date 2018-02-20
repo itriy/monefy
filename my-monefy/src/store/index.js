@@ -51,11 +51,13 @@ const store = new Vuex.Store({
         }
     },
     getters: {
-        pickedFilterList(state) { return (value) => {
-           return !value ? [] : state.list.filter((elem) => {
-                return formatDate(elem.date) >= +value[0] && formatDate(elem.date) <= +value[1]
-            })
-        }},
+        pickedFilterList(state) { 
+            return (value) => {
+               return !value ? [] : state.list.filter((elem) => {
+                    return formatDate(elem.date) >= +value[0] && formatDate(elem.date) <= +value[1]
+                })
+            }
+        },
         pickedList(state){
             return state.pickedList
         },
@@ -64,24 +66,24 @@ const store = new Vuex.Store({
 
             state.pickedList.map((elem) => {
 
-                if((formatAmount(elem.amount) < 0) && pickedListCategory.indexOf(elem.category) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
+                if((formatAmount(elem['converted amount']) < 0) && pickedListCategory.indexOf(elem.category) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
                     return pickedListCategory.push(elem.category)
                 }
             })
 
             return pickedListCategory
         },
-        pickedListDate(state) {
-            let pickedListDate = [];
+        pickedDateList(state) {
+            let pickedDateList = [];
 
             state.pickedList.map((elem) => {
 
-                if(pickedListDate.indexOf(elem.date) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
-                    return pickedListDate.push(elem.date)
+                if(pickedDateList.indexOf(elem.date) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
+                    return pickedDateList.push(elem.date)
                 }
             })
 
-            return pickedListDate
+            return pickedDateList
         },
         pickedSumListToCategory(state, getters) {
             let pickedSumListToCategory = [];
@@ -94,7 +96,7 @@ const store = new Vuex.Store({
                 })
 
                 let result = catArr.reduce((sum, current) => {
-                  return sum + formatAmount(current.amount);
+                  return sum + formatAmount(current['converted amount']);
                 }, 0)
 
                 pickedSumListToCategory.push(Math.abs(result));
@@ -102,24 +104,35 @@ const store = new Vuex.Store({
 
             return pickedSumListToCategory
         },
-        pickedDateListToCategory(state, getters) {
-            // let pickedDateListToCategory = [];
-            // let category = getters.pickedListCategory;
+        pickedIncomeOutgoList(state, getters) {
+            let pickedIncomeOutgoList = [[],[]];
+            let date = getters.pickedDateList;
 
-            // category.forEach((cat) => {
+            date.forEach((dd) => {
 
-            //     let catArr = state.pickedList.filter((elem) => {
-            //       return elem.category === cat
-            //     })
+                let dateArr = state.pickedList.filter((elem) => {
+                  return elem.date === dd && elem.category.indexOf('To') && elem.category.indexOf('From')
+                })
+                console.log('dateArr',dateArr)
 
-            //     // let date = catArr.reduce((sum, current) => {
-            //     //   return sum + formatAmount(current.amount);
-            //     // }, 0)
+                dateArr.forEach((elem) => {
+                    if (formatAmount(elem['converted amount']) > 0) {
+                        pickedIncomeOutgoList[0].push(Math.abs(formatAmount(elem['converted amount'])));
+                    } else {
+                        pickedIncomeOutgoList[1].push(Math.abs(formatAmount(elem['converted amount'])));
+                    }
+                })
 
-            //     pickedDateListToCategory.push(Math.abs(date));
-            // })
+                // let val = dateArr.reduce((sum, current) => {
+                //   return sum + formatAmount(current.amount);
+                // }, 0)
 
-            // return pickedDateListToCategory;
+                // pickedIncomeOutgoList.push(Math.abs(val));
+            })
+
+            console.log('pickedIncomeOutgoList',pickedIncomeOutgoList)
+
+            return pickedIncomeOutgoList;
         }
 
     }
