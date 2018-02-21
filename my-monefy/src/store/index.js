@@ -73,18 +73,18 @@ const store = new Vuex.Store({
 
             return pickedListCategory
         },
-        pickedDateList(state) {
-            let pickedDateList = [];
+        // pickedDateList(state) {
+        //     let pickedDateList = [];
 
-            state.pickedList.map((elem) => {
+        //     state.pickedList.map((elem) => {
 
-                if(pickedDateList.indexOf(elem.date) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
-                    return pickedDateList.push(elem.date)
-                }
-            })
+        //         if(pickedDateList.indexOf(elem.date) === -1 && elem.category.indexOf('To') && elem.category.indexOf('From')) {
+        //             return pickedDateList.push(elem.date)
+        //         }
+        //     })
 
-            return pickedDateList
-        },
+        //     return pickedDateList
+        // },
         pickedSumListToCategory(state, getters) {
             let pickedSumListToCategory = [];
             let category = getters.pickedListCategory;
@@ -104,36 +104,97 @@ const store = new Vuex.Store({
 
             return pickedSumListToCategory
         },
-        pickedIncomeOutgoList(state, getters) {
-            let pickedIncomeOutgoList = [[],[]];
-            let date = getters.pickedDateList;
+        pickedSumToYear: (state, getters) => (val) => {
+            let pickedSumToYear = [];
+            // let category = getters.pickedListCategory;
 
-            date.forEach((dd) => {
-
-                let dateArr = state.pickedList.filter((elem) => {
-                  return elem.date === dd && elem.category.indexOf('To') && elem.category.indexOf('From')
-                })
-                console.log('dateArr',dateArr)
-
-                dateArr.forEach((elem) => {
-                    if (formatAmount(elem['converted amount']) > 0) {
-                        pickedIncomeOutgoList[0].push(Math.abs(formatAmount(elem['converted amount'])));
-                    } else {
-                        pickedIncomeOutgoList[1].push(Math.abs(formatAmount(elem['converted amount'])));
-                    }
-                })
-
-                // let val = dateArr.reduce((sum, current) => {
-                //   return sum + formatAmount(current.amount);
-                // }, 0)
-
-                // pickedIncomeOutgoList.push(Math.abs(val));
+            let dataArr = state.list.filter((elem) => {
+                return new Date(formatDate(elem.date)).getFullYear() == val
             })
+            console.log(dataArr)
 
-            console.log('pickedIncomeOutgoList',pickedIncomeOutgoList)
+            // dataArr.forEach((el, i) => {
 
-            return pickedIncomeOutgoList;
-        }
+            //     let result = catArr.reduce((sum, current) => {
+            //       return sum + formatAmount(current['converted amount']);
+            //     }, 0)
+
+            //     pickedSumToYear.push(Math.abs(result));
+            // })
+
+            return pickedSumToYear
+        },
+        // dataByLabel: (state) => (arg) => {
+        //     let dataArr = [];
+
+        //     state.list.map((elem) => {
+
+        //         let date;
+
+        //         if (arg === 'year'){
+        //             date = new Date(formatDate(elem.date)).getFullYear();
+        //         } else if (arg === 'month'){
+        //             date = new Date(formatDate(elem.date)).getMonth();
+        //         }
+
+        //         if(dataArr.indexOf(date) === -1) {
+        //             return dataArr.push(date)
+        //         }
+        //     })
+
+
+        //    return dataArr
+        // },
+        // dataByData: (state,getter) => (arg) => {
+        //     let dataByData = [];
+        //     let years = getters.dataByLabel(arg);
+
+        //     years.forEach((elem) => {
+
+        //         let catArr = state.list.filter((el) => {
+        //           return new Date(formatDate(el.date)).getFullYear() === elem
+        //         })
+        //         console.log('catArr',catArr)
+
+        //         // let result = catArr.reduce((sum, current) => {
+        //         //   return sum + formatAmount(current['converted amount']);
+        //         // }, 0)
+
+        //         // dataByData.push(Math.abs(result));
+        //     })
+
+        //     return dataByData
+        // }
+        // pickedIncomeOutgoList(state, getters) {
+        //     let pickedIncomeOutgoList = [[],[]];
+        //     let date = getters.pickedDateList;
+
+        //     date.forEach((dd) => {
+
+        //         let dateArr = state.pickedList.filter((elem) => {
+        //           return elem.date === dd && elem.category.indexOf('To') && elem.category.indexOf('From')
+        //         })
+        //         // console.log('dateArr',dateArr)
+
+        //         dateArr.forEach((elem) => {
+        //             if (formatAmount(elem['converted amount']) > 0) {
+        //                 pickedIncomeOutgoList[0].push(Math.abs(formatAmount(elem['converted amount'])));
+        //             } else {
+        //                 pickedIncomeOutgoList[1].push(Math.abs(formatAmount(elem['converted amount'])));
+        //             }
+        //         })
+
+        //         // let val = dateArr.reduce((sum, current) => {
+        //         //   return sum + formatAmount(current.amount);
+        //         // }, 0)
+
+        //         // pickedIncomeOutgoList.push(Math.abs(val));
+        //     })
+
+        //     console.log('pickedIncomeOutgoList',pickedIncomeOutgoList)
+
+        //     return pickedIncomeOutgoList;
+        // }
 
     }
 

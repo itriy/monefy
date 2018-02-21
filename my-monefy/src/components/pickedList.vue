@@ -11,6 +11,7 @@
     </el-date-picker>
 
     <!-- <p>{{$route.params.id}}</p> -->
+    <p>{{year}}</p>
 {{valueCalc}}
     <el-row>
       <el-col :span="24">
@@ -18,10 +19,25 @@
           <el-menu-item index="/">Pie</el-menu-item>
           <el-menu-item index="line">Line</el-menu-item>
         </el-menu>
-        
-          <pie-example  v-if="$route.params.id !== 'line'" :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
 
-          <line-example  v-if="$route.params.id === 'line'" :chart-data="LineChartData" :chart-labels="LineChartLabels"></line-example>
+        <template v-if="$route.params.id !== 'line'">
+          <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
+        </template>
+
+        <template v-if="$route.params.id === 'line'">
+          <p>
+            <el-date-picker
+              v-model="year"
+              type="year"
+              value-format="yyyy"
+              placeholder="Pick a year">
+            </el-date-picker>
+          </p>
+
+          <line-example :chart-data="LineChartData" :chart-labels="LineChartLabels"></line-example>
+        </template>
+
+         
 
       </el-col>
       <el-col :span="24">
@@ -36,7 +52,7 @@
                 prop="account"
                 label="Account"
                 sortable
-                width="100">
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="category"
@@ -49,11 +65,11 @@
                 sortable
                 width="100">
               </el-table-column>
-              <el-table-column
+       <!--        <el-table-column
                 prop="currency"
                 label="Currency"
                 width="100">
-              </el-table-column>
+              </el-table-column> -->
             </el-table>
           </el-collapse-item>
         </el-collapse>
@@ -77,11 +93,11 @@ export default {
        value: '',
        PieChartData: [],
        PieChartLabels: [],
+       year: '2018',
 
        LineChartData: [],
        LineChartLabels: [],
        pickerOptions: {},
-       // activeIndex: '/'
     }
   },
   // mounted() {
@@ -107,14 +123,18 @@ export default {
        this.PieChartLabels = this.$store.getters.pickedListCategory;
        this.PieChartData = this.$store.getters.pickedSumListToCategory;
 
-       this.LineChartLabels = this.$store.getters.pickedDateList;
-       this.LineChartData = this.$store.getters.pickedIncomeOutgoList;
+       // this.year = new Date();
+
+       this.LineChartData = this.$store.getters.pickedSumToYear(this.year);
+
+       // this.LineChartLabels = this.$store.getters.pickedDateList;
+       // this.LineChartData = this.$store.getters.pickedIncomeOutgoList;
 
       // console.log('PieChartLabels',this.PieChartLabels)
       // console.log('PieChartData',this.PieChartData)
 
-      console.log('LineChartLabels',this.LineChartLabels)
-      console.log('LineChartData',this.LineChartData)
+      // console.log('LineChartLabels',this.LineChartLabels)
+      // console.log('LineChartData',this.LineChartData)
     }
 
   },
@@ -158,6 +178,10 @@ export default {
 
   // methods: {
 
+  //     dataBy(arg){
+  //       this.LineChartLabels = this.$store.getters.dataByLabel(arg);
+  //       this.LineChartData = this.$store.getters.dataByData(arg);
+  //     }
 
   // },
 }
