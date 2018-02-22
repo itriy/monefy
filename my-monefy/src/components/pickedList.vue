@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <el-date-picker
       class="datapicker"
@@ -9,6 +9,7 @@
       :picker-options="pickerOptions"
       end-placeholder="End date">
     </el-date-picker>
+
 
 {{valueCalc}}
 
@@ -44,7 +45,34 @@
         </el-collapse>
 
   </div>
+</template> -->
+<template>
+  <v-layout row wrap>
+    {{valueCalc}}
+    <v-flex xs12 sm6>
+      <v-date-picker color="green lighten-1" v-model="value"></v-date-picker>
+    </v-flex>
+    <v-flex xs12 sm6 class="hidden-xs-only">
+      <v-date-picker color="green lighten-1" header-color="primary" v-model="value2"></v-date-picker>
+    </v-flex>
+  </v-layout>
 </template>
+<!-- <template>
+<div>
+  <p>
+    <v-date-picker multiple v-model="dates"></v-date-picker>
+    <v-date-picker lazy multiple v-model="dates"></v-date-picker>
+  </p>
+  <p>
+    <v-date-picker multiple type="month" v-model="months"></v-date-picker>
+    <v-date-picker lazy multiple type="month" v-model="months"></v-date-picker>
+  </p>
+
+</div>
+
+</template> -->
+
+
 
 <script>
 import PieExample from './PieChart'
@@ -56,11 +84,16 @@ export default {
   data () {
     return {
        value: '',
+       value2: '',
        PieChartData: [],
        PieChartLabels: [],
        pickerOptions: {},
-    }
+               dates: ['2018-01-15', '2018-01-20'],
+        months: ['2018-01', '2017-03'],
+
+        }
   },
+
   // mounted() {
   //   // this.$store.dispatch('getList');
   // },
@@ -79,6 +112,9 @@ export default {
 
        this.PieChartLabels = this.$store.getters.pickedListCategory;
        this.PieChartData = this.$store.getters.pickedSumListToCategory;
+
+       console.log(this.value)
+       console.log(this.value2)
 
        // this.year = new Date();
 
