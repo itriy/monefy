@@ -111,17 +111,17 @@ const store = new Vuex.Store({
             let dataArr = state.list.filter((elem) => {
                 return new Date(formatDate(elem.date)).getFullYear() == val
             })
-            console.log(dataArr)
 
-            // dataArr.forEach((el, i) => {
+            dataArr.forEach((el, i) => {
 
-            //     let result = catArr.reduce((sum, current) => {
-            //       return sum + formatAmount(current['converted amount']);
-            //     }, 0)
+                // let result = catArr.reduce((sum, current) => {
+                //   return sum + formatAmount(current['converted amount']);
+                // }, 0)
 
-            //     pickedSumToYear.push(Math.abs(result));
-            // })
+                pickedSumToYear.push(el);
+            })
 
+            console.log(pickedSumToYear)
             return pickedSumToYear
         },
         // dataByLabel: (state) => (arg) => {

@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-<!--     <el-menu :default-active="activeIndex" class="el-menu-demo" router mode="horizontal">
-      <el-menu-item index="/">Main</el-menu-item>
-      <el-menu-item index="info">Info</el-menu-item>
-    </el-menu> -->
-<!--     <div>
-      <router-link to="/">Main</router-link>
-      <router-link to="/info">Info</router-link>
-    </div> -->
+    <el-menu :default-active="activeIndex" router mode="horizontal">
+      <el-menu-item index="/">Pie</el-menu-item>
+      <el-menu-item index="line">Line</el-menu-item>
+    </el-menu>
     <router-view/>
   </div>
 </template>
@@ -20,6 +16,12 @@ export default {
       // activeIndex: '/pie'
     };
   },
+  computed: {
+
+    activeIndex(){
+      return this.$route.params.id || '/';
+    },
+  }
 }
 </script>
 

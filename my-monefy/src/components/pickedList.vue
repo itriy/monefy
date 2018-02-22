@@ -10,37 +10,10 @@
       end-placeholder="End date">
     </el-date-picker>
 
-    <!-- <p>{{$route.params.id}}</p> -->
-    <p>{{year}}</p>
 {{valueCalc}}
-    <el-row>
-      <el-col :span="24">
-        <el-menu :default-active="activeIndex" router mode="horizontal">
-          <el-menu-item index="/">Pie</el-menu-item>
-          <el-menu-item index="line">Line</el-menu-item>
-        </el-menu>
 
-        <template v-if="$route.params.id !== 'line'">
-          <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
-        </template>
+      <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
 
-        <template v-if="$route.params.id === 'line'">
-          <p>
-            <el-date-picker
-              v-model="year"
-              type="year"
-              value-format="yyyy"
-              placeholder="Pick a year">
-            </el-date-picker>
-          </p>
-
-          <line-example :chart-data="LineChartData" :chart-labels="LineChartLabels"></line-example>
-        </template>
-
-         
-
-      </el-col>
-      <el-col :span="24">
         <el-collapse accordion>
           <el-collapse-item title="Table" name="1">
             <el-table
@@ -65,38 +38,26 @@
                 sortable
                 width="100">
               </el-table-column>
-       <!--        <el-table-column
-                prop="currency"
-                label="Currency"
-                width="100">
-              </el-table-column> -->
+
             </el-table>
           </el-collapse-item>
         </el-collapse>
-      </el-col>
-    </el-row>
-
 
   </div>
 </template>
 
 <script>
-import LineExample from './LineChart'
 import PieExample from './PieChart'
 
 
 export default {
   name: 'pickedList',
-  components: { LineExample, PieExample },
+  components: { PieExample },
   data () {
     return {
        value: '',
        PieChartData: [],
        PieChartLabels: [],
-       year: '2018',
-
-       LineChartData: [],
-       LineChartLabels: [],
        pickerOptions: {},
     }
   },
@@ -104,10 +65,6 @@ export default {
   //   // this.$store.dispatch('getList');
   // },
   computed: {
-
-    activeIndex(){
-      return this.$route.params.id || '/';
-    },
 
     pickedList: {
       get(){
@@ -125,7 +82,7 @@ export default {
 
        // this.year = new Date();
 
-       this.LineChartData = this.$store.getters.pickedSumToYear(this.year);
+       // this.LineChartData = this.$store.getters.pickedSumToYear(this.year);
 
        // this.LineChartLabels = this.$store.getters.pickedDateList;
        // this.LineChartData = this.$store.getters.pickedIncomeOutgoList;
@@ -174,23 +131,14 @@ export default {
                   }
                 }]
     }
-  },
-
-  // methods: {
-
-  //     dataBy(arg){
-  //       this.LineChartLabels = this.$store.getters.dataByLabel(arg);
-  //       this.LineChartData = this.$store.getters.dataByData(arg);
-  //     }
-
-  // },
+  }
 }
 </script>
 
 <style scoped>
   .datapicker {
-    margin: auto;
+    margin: 20px auto;
     display: block;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
   }
 </style>

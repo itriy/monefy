@@ -5,7 +5,8 @@ import locale from 'element-ui/lib/locale/lang/ru-RU'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import pickedList from '@/components/pickedList'
-import infoPage from '@/components/infoPage'
+// import infoPage from '@/components/infoPage'
+import yearChart from '@/components/yearChart'
 
 Vue.use(Router)
 Vue.use(ElementUI, {locale})
@@ -17,14 +18,14 @@ export default new Router({
             path: '/',
             name: 'pickedList',
             component: pickedList,
-            children: [
-                { path: '/:id', component: pickedList },
-            ]
+            // children: [
+            //     { path: '/:id', component: pickedList },
+            // ]
         },
         {
-          path: '/info',
-          name: 'infoPage',
-          component: infoPage,
+          path: '/line',
+          name: 'yearChart',
+          component: yearChart,
         }
     ]
 })
