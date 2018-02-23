@@ -1,76 +1,12 @@
-<!-- <template>
-  <div>
-    <el-date-picker
-      class="datapicker"
-      v-model="value"
-      type="daterange"
-      range-separator="To"
-      start-placeholder="Start date"
-      :picker-options="pickerOptions"
-      end-placeholder="End date">
-    </el-date-picker>
-
-
-{{valueCalc}}
-
-      <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
-
-        <el-collapse accordion>
-          <el-collapse-item title="Table" name="1">
-            <el-table
-              :data="pickedList"
-              stripe
-              border
-              style="width: 100%">
-              <el-table-column
-                prop="account"
-                label="Account"
-                sortable
-                width="120">
-              </el-table-column>
-              <el-table-column
-                prop="category"
-                sortable
-                label="Category">
-              </el-table-column>
-              <el-table-column
-                prop="converted amount"
-                label="Amount"
-                sortable
-                width="100">
-              </el-table-column>
-
-            </el-table>
-          </el-collapse-item>
-        </el-collapse>
-
-  </div>
-</template> -->
 <template>
   <v-layout row wrap>
-    {{valueCalc}}
     <v-flex xs12 sm6>
-      <v-date-picker color="green lighten-1" v-model="value"></v-date-picker>
-    </v-flex>
-    <v-flex xs12 sm6 class="hidden-xs-only">
-      <v-date-picker color="green lighten-1" header-color="primary" v-model="value2"></v-date-picker>
+      {{valueCalc}}
+      {{value}}
+      <!-- <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example> -->
     </v-flex>
   </v-layout>
 </template>
-<!-- <template>
-<div>
-  <p>
-    <v-date-picker multiple v-model="dates"></v-date-picker>
-    <v-date-picker lazy multiple v-model="dates"></v-date-picker>
-  </p>
-  <p>
-    <v-date-picker multiple type="month" v-model="months"></v-date-picker>
-    <v-date-picker lazy multiple type="month" v-model="months"></v-date-picker>
-  </p>
-
-</div>
-
-</template> -->
 
 
 
@@ -83,16 +19,14 @@ export default {
   components: { PieExample },
   data () {
     return {
-       value: '',
-       value2: '',
+       // value: '',
+       // value2: '',
        PieChartData: [],
        PieChartLabels: [],
        pickerOptions: {},
-               dates: ['2018-01-15', '2018-01-20'],
-        months: ['2018-01', '2017-03'],
-
-        }
+    }
   },
+  props: ['value'],
 
   // mounted() {
   //   // this.$store.dispatch('getList');
@@ -108,13 +42,13 @@ export default {
       }
     },
     valueCalc(){
-       this.$store.dispatch('getPickedList',this.value);
+       // this.$store.dispatch('getPickedList',this.value);
 
        this.PieChartLabels = this.$store.getters.pickedListCategory;
        this.PieChartData = this.$store.getters.pickedSumListToCategory;
 
        console.log(this.value)
-       console.log(this.value2)
+       // console.log(this.value2)
 
        // this.year = new Date();
 

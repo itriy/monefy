@@ -1,21 +1,53 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+require('../node_modules/vuetify/src/stylus/app.styl')
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
 import * as firebase from 'firebase'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import {
+  Vuetify,
+  VApp,
+  VNavigationDrawer,
+  VFooter,
+  VList,
+  VBtn,
+  VIcon,
+  VGrid,
+  VToolbar,
+  transitions
+} from 'vuetify'
+// import 'vuetify/dist/vuetify.min.css'
+
+
+import VCalendar from 'v-calendar';
+import 'v-calendar/lib/v-calendar.min.css';
 
 Vue.use(Vuetify, {
+  components: {
+    VApp,
+    VNavigationDrawer,
+    VFooter,
+    VList,
+    VBtn,
+    VIcon,
+    VGrid,
+    VToolbar,
+    transitions
+  },
   theme: {
-    primary: '#3f51b5',
-    secondary: '#b0bec5',
-    accent: '#8c9eff',
-    error: '#b71c1c'
+    primary: '#ee44aa',
+    secondary: '#424242',
+    accent: '#82B1FF',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107'
   }
 })
+
+Vue.use(VCalendar);
 
 Vue.config.productionTip = false
 
