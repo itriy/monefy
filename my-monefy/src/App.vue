@@ -10,10 +10,9 @@
     >
       <v-layout row wrap align-center>
           <v-flex xs10 offset-xs1>
-            <v-btn v-for="btn in btns" :key="btn.title" @click="setDateValue(btn.type)" block widht="90%" :color="btn.color" dark large>{{btn.title}}</v-btn>
+            <v-btn v-for="btn in btns" :key="btn.title" @click="setDateValue()" block widht="90%" :color="btn.color" dark large>{{btn.title}}</v-btn>
          </v-flex>
          <v-flex xs10 offset-xs1>
-           <!-- <v-date-picker reactive :type="type" color="green lighten-1" header-color="primary" v-model="value" full-width :value="value"></v-date-picker> -->
            <v-date-picker
              mode='range'
              v-model='selectedDate'
@@ -36,7 +35,7 @@
       <v-container fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>
-              <!-- <router-view></router-view> -->
+              <router-view></router-view>
           </v-flex>
         </v-layout>
       </v-container>
@@ -53,8 +52,8 @@ export default {
     return {
       // activeIndex: '/pie'
       selectedDate: {
-             start: new Date(2018, 0, 9),
-             end: new Date(2018, 0, 18)
+        start: new Date(2018, 0, 9),
+        end: new Date(2018, 0, 18)
       },
       btns: [
         {
@@ -73,9 +72,7 @@ export default {
           color: 'success'
         }
       ],
-      type: 'month',
       drawer: true,
-      value: '',
     };
   },
   computed: {
@@ -83,8 +80,16 @@ export default {
       return this.$route.params.id || '/';
     },
     valueCalc() {
-      console.log(this.selectedDate)
-    }
+      this.$store.dispatch('getPickedList',this.selectedDate);
+    },
+    pickedList: {
+      get(){
+        return this.$store.getters.pickedList
+      },
+      set(val){
+        this.$store.dispatch('getPickedList',val);
+      }
+    },
   },
 
   methods: {

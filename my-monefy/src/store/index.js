@@ -23,7 +23,7 @@ const store = new Vuex.Store({
     strict: true,
     state: {
         list: [],
-        pickedList: []
+        pickedList: [],
     },
     mutations: {
         'set-list': (state,payload) => state.list = payload,
@@ -44,6 +44,7 @@ const store = new Vuex.Store({
         },
         getPickedList(context, value) {
             let pickedList = context.getters.pickedFilterList(value);
+            console.log('pickedList',value)
 
             context.commit('pick-list', pickedList);
 
@@ -54,7 +55,7 @@ const store = new Vuex.Store({
         pickedFilterList(state) { 
             return (value) => {
                return !value ? [] : state.list.filter((elem) => {
-                    return formatDate(elem.date) >= +value[0] && formatDate(elem.date) <= +value[1]
+                    return formatDate(elem.date) >= +value['start'] && formatDate(elem.date) <= +value['end']
                 })
             }
         },
