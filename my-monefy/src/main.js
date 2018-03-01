@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import store from './store'
 import * as firebase from 'firebase'
+import AmCharts from 'amcharts3'
+import AmSerial from 'amcharts3/amcharts/serial'
+import AmPie from 'amcharts3/amcharts/pie'
 
 Vue.config.productionTip = false
 
@@ -13,6 +16,9 @@ new Vue({
   el: '#app',
   router,
   store,
+  AmCharts,
+  AmPie,
+  AmSerial,
   components: { App },
   template: '<App/>',
   created(){

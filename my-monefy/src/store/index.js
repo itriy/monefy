@@ -47,6 +47,8 @@ const store = new Vuex.Store({
 
             context.commit('pick-list', pickedList);
 
+            console.log('pickedList',pickedList)
+
             return pickedList
         }
     },

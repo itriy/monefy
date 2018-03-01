@@ -11,8 +11,8 @@
     </el-date-picker>
 
 {{valueCalc}}
-
-      <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example>
+      <div id="chartdiv" style="width: 100%; height: 400px;"></div>
+      <!-- <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example> -->
 
         <el-collapse accordion>
           <el-collapse-item title="Table" name="1">
@@ -47,22 +47,48 @@
 </template>
 
 <script>
-import PieExample from './PieChart'
+// import PieExample from './PieChart'
 
 
 export default {
   name: 'pickedList',
-  components: { PieExample },
+  // components: { AmCharts, AmPie },
   data () {
     return {
-       value: '',
+       value: ['Fri Dec 01 2017 12:23:14 GMT+0200 (EET)', 'Thu Mar 01 2018 12:23:14 GMT+0200 (EET)'],
        PieChartData: [],
-       PieChartLabels: [],
+       // PieChartLabels: [],
        pickerOptions: {},
+       fp: null
     }
   },
+  // created () {
+  //   AmCharts.makeChart("chartdiv",
+  //     {
+  //       "type": "serial",
+  //       "categoryField": "type",
+  //       "chartCursor": {},
+  //       "graphs": [
+  //         {
+  //           "type": "column",
+  //           "title": "Pizza types",
+  //           "valueField": "sold",
+  //           "fillAlphas": 0.8
+  //         }
+  //       ],
+
+  //       "dataProvider": [
+  //         { "type": "Margherita", "sold": 120 },
+  //         { "type": "Funghi", "sold": 82 },
+  //         { "type": "Capricciosa", "sold": 78 },
+  //         { "type": "Quattro Stagioni", "sold": 71 }
+  //       ]
+  //     }
+  //   );
+  // },
   // mounted() {
   //   // this.$store.dispatch('getList');
+  //   this.initChart();
   // },
   computed: {
 
@@ -76,6 +102,8 @@ export default {
     },
     valueCalc(){
        this.$store.dispatch('getPickedList',this.value);
+
+       console.log(this.value)
 
        this.PieChartLabels = this.$store.getters.pickedListCategory;
        this.PieChartData = this.$store.getters.pickedSumListToCategory;
@@ -96,6 +124,8 @@ export default {
 
   },
   created(){
+    // this.initChart(); 
+
     this.pickerOptions = {
       shortcuts: [{
                   text: 'Last week',
@@ -131,7 +161,33 @@ export default {
                   }
                 }]
     }
+
+    // AmCharts.makeChart( "chartdiv", {
+    //   "type": "pie",
+    //   "dataProvider": this.$store.state.list,
+    //   "valueField": "converted amount",
+    //   "titleField": "category",
+    //    "balloon":{
+    //    "fixedPosition":true
+    //   }
+    // } );
+  },
+  methods: {
+    initChart(){
+      console.log(this.$store.state.list)
+      this.fp = AmCharts.makeChart( "chartdiv", {
+        "type": "pie",
+        "dataProvider": this.value,
+        "valueField": "converted amount",
+        "titleField": "category",
+         "balloon":{
+         "fixedPosition":true
+        }
+      } );
+    }
+
   }
+
 }
 </script>
 
@@ -140,5 +196,9 @@ export default {
     margin: 20px auto;
     display: block;
     /*margin-bottom: 20px;*/
+  }
+  #chartdiv {
+    width: 100%;
+    height: 500px;
   }
 </style>
