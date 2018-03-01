@@ -10,7 +10,7 @@
       end-placeholder="End date">
     </el-date-picker>
 
-{{valueCalc}}
+      {{valueCalc}}
       <div id="chartdiv" style="width: 100%; height: 400px;"></div>
       <!-- <pie-example :chart-data="PieChartData" :chart-labels="PieChartLabels"></pie-example> -->
 
@@ -47,16 +47,14 @@
 </template>
 
 <script>
-// import PieExample from './PieChart'
 
 
 export default {
   name: 'pickedList',
-  // components: { AmCharts, AmPie },
   data () {
     return {
-       value: ['Fri Dec 01 2017 12:23:14 GMT+0200 (EET)', 'Thu Mar 01 2018 12:23:14 GMT+0200 (EET)'],
-       PieChartData: [],
+
+       // PieChartData: [],
        // PieChartLabels: [],
        pickerOptions: {},
        fp: null
@@ -86,27 +84,30 @@ export default {
   //     }
   //   );
   // },
-  // mounted() {
-  //   // this.$store.dispatch('getList');
-  //   this.initChart();
-  // },
+  mounted() {
+    // this.$store.dispatch('getList');
+    this.initChart();
+  },
   computed: {
 
-    pickedList: {
+    value: {
       get(){
-        return this.$store.getters.pickedList
+        return this.$store.getters.dateValue
       },
       set(val){
-        this.$store.dispatch('getPickedList',val);
+        this.$store.dispatch('setDateValue', val)
       }
     },
+    pickedList (){
+      return this.$store.getters.pickedList
+    },
     valueCalc(){
-       this.$store.dispatch('getPickedList',this.value);
+       // this.$store.dispatch('getPickedList',this.value);
 
-       console.log(this.value)
+       console.log(this.pickedList)
 
-       this.PieChartLabels = this.$store.getters.pickedListCategory;
-       this.PieChartData = this.$store.getters.pickedSumListToCategory;
+       // this.PieChartLabels = this.$store.getters.pickedListCategory;
+       // this.PieChartData = this.$store.getters.pickedSumListToCategory;
 
        // this.year = new Date();
 
@@ -114,14 +115,13 @@ export default {
 
        // this.LineChartLabels = this.$store.getters.pickedDateList;
        // this.LineChartData = this.$store.getters.pickedIncomeOutgoList;
-
-      // console.log('PieChartLabels',this.PieChartLabels)
-      // console.log('PieChartData',this.PieChartData)
-
-      // console.log('LineChartLabels',this.LineChartLabels)
-      // console.log('LineChartData',this.LineChartData)
     }
 
+  },
+  watch: {
+    pickedList(val, old) {
+      if(val != old) this.initChart()
+    }
   },
   created(){
     // this.initChart(); 
@@ -162,22 +162,13 @@ export default {
                 }]
     }
 
-    // AmCharts.makeChart( "chartdiv", {
-    //   "type": "pie",
-    //   "dataProvider": this.$store.state.list,
-    //   "valueField": "converted amount",
-    //   "titleField": "category",
-    //    "balloon":{
-    //    "fixedPosition":true
-    //   }
-    // } );
   },
   methods: {
     initChart(){
-      console.log(this.$store.state.list)
+
       this.fp = AmCharts.makeChart( "chartdiv", {
         "type": "pie",
-        "dataProvider": this.value,
+        "dataProvider": this.pickedList,
         "valueField": "converted amount",
         "titleField": "category",
          "balloon":{

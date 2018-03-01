@@ -31,6 +31,13 @@ new Vue({
         messagingSenderId: "628234001672"
     });
 
+    const end = new Date();
+    const start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 150);
+
+
+
     this.$store.dispatch('getList')
+    this.$store.dispatch('setDateValue', [start,end])
   }
 })
